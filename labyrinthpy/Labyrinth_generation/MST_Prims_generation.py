@@ -2,6 +2,7 @@ from labyrinthpy.Entities.labyrinth import Labyrinth
 from labyrinthpy.Entities.labyrinth import Cell
 from labyrinthpy.Labyrinth_generation.general_generation_methods import update_cells
 import random
+
 def generate_dfs(width, height) -> Labyrinth:
     path = [] #list of chosen adjacent cells starting from randomly chosen first cell
 
@@ -34,4 +35,13 @@ def generate_dfs(width, height) -> Labyrinth:
             labyrinth.set_cell(labyrinth.height_ - 1, i, Cell.PATH)
             #labyrinth.finish_coord_ = (labyrinth.height_ - 1, i)
             break
+    return labyrinth
+
+def generate_mst_prims(width, height) -> Labyrinth:
+
+    labyrinth = Labyrinth(width, height, Cell.WALL)
+    y, x = labyrinth.get_random_cell() #randomly choose starting cell
+    update_cells(labyrinth, y, x, Cell.PATH)
+
+    neighbours = labyrinth.neighbour_check(y, x)
     return labyrinth

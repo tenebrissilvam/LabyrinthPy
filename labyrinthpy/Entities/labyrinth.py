@@ -1,5 +1,6 @@
 from enum import Enum
 import random
+import os
 
 class Cell(Enum):
     PATH = 0
@@ -14,6 +15,8 @@ class Labyrinth:
         self.height_ = height * 2 + 1
         self.grid_ = [[cell] * self.width_ for i in range(self.height_)]
         self.solutions_ = []
+        #self.start_coord_
+        #self.finish_coord_
 
     def set_cell(self, y, x, cell: Cell):
         self.grid_[y][x] = cell
@@ -53,7 +56,12 @@ class Labyrinth:
                 else:
                     print("   ", sep='', end='')
             print('\n', sep = '', end = '')
-        print('\n')
 
     def solution(self, algorithm: str = "DFS"):
+        return
+
+    def save(self, filepath):
+        #with open(os.path.join(filepath, 'GeneratedMaze'), 'w') as file1:
+            #to_file = raw_input(self.visualize())
+            #file1.write(to_file)
         return
