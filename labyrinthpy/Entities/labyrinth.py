@@ -2,6 +2,7 @@ from enum import Enum
 import random
 import os
 
+
 class Cell(Enum):
     PATH = 0
     WALL = 1
@@ -9,14 +10,15 @@ class Cell(Enum):
     END = 3
     SOLVED = 4
 
+
 class Labyrinth:
-    def __init__(self, width, height, cell: Cell = Cell.WALL ):
+    def __init__(self, width, height, cell: Cell = Cell.WALL):
         self.width_ = width * 2 + 1
         self.height_ = height * 2 + 1
         self.grid_ = [[cell] * self.width_ for i in range(self.height_)]
         self.solutions_ = []
-        #self.start_coord_
-        #self.finish_coord_
+        self.start_coord_ = ()
+        self.finish_coord_ = ()
 
     def set_cell(self, y, x, cell: Cell):
         self.grid_[y][x] = cell
@@ -36,13 +38,13 @@ class Labyrinth:
     def neighbour_check(self, row, column, wall_flg: bool = False) -> list[tuple[int, int]]:
         neighbours = []
 
-        if row > 1 and self.cell_check(row - 2, column, wall_flg): #if not top border
+        if row > 1 and self.cell_check(row - 2, column, wall_flg):  # if not top border
             neighbours.append((row - 2, column))
-        if row < self.height_ - 2 and self.cell_check(row + 2, column, wall_flg): #if not bottom border
+        if row < self.height_ - 2 and self.cell_check(row + 2, column, wall_flg):  # if not bottom border
             neighbours.append((row + 2, column))
-        if column > 1 and self.cell_check(row, column - 2, wall_flg): #if not left border
+        if column > 1 and self.cell_check(row, column - 2, wall_flg):  # if not left border
             neighbours.append((row, column - 2))
-        if column < self.width_ - 2 and self.cell_check(row, column + 2, wall_flg): #if not right border
+        if column < self.width_ - 2 and self.cell_check(row, column + 2, wall_flg):  # if not right border
             neighbours.append((row, column + 2))
 
         random.shuffle(neighbours)
@@ -52,16 +54,16 @@ class Labyrinth:
         for i in range(self.height_):
             for j in range(self.width_):
                 if self.cell_check(i, j, True):
-                    print(u"\u2588\u2588\u2588", sep = '', end='')
+                    print(u"\u2588\u2588\u2588", sep='', end='')
                 else:
                     print("   ", sep='', end='')
-            print('\n', sep = '', end = '')
+            print('\n', sep='', end='')
 
     def solution(self, algorithm: str = "DFS"):
         return
 
     def save(self, filepath):
-        #with open(os.path.join(filepath, 'GeneratedMaze'), 'w') as file1:
-            #to_file = raw_input(self.visualize())
-            #file1.write(to_file)
+        # with open(os.path.join(filepath, 'GeneratedMaze'), 'w') as file1:
+        # to_file = raw_input(self.visualize())
+        # file1.write(to_file)
         return
