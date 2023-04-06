@@ -12,6 +12,7 @@ w = 0
 h = 0
 gen_option = ''
 m = labyrinthpy.Entities.labyrinth.Labyrinth()
+save_filepath = 'LabyrinthPyLab.txt'
 
 window = Tk()
 window.title("LabyrinthPy")
@@ -37,7 +38,7 @@ def gen_lab():
     elif gen_option == 'MinimalSpanningTree Prims':
         m = labyrinthpy.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
     elif gen_option == 'MinimalSpanningTree Kruskals':
-        m = labyrinthpy.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
+        m = labyrinthpy.Labyrinth_generation.MST_Kruskals_generation.generate_mst_prims(w, h)
 
 
 def print_solution():
@@ -72,6 +73,9 @@ def show_plot():
             text.insert(END, '\n')
     text.pack()
 
+    save_button = tkinter.Button(window, text='Save as .txt', command=save_to_txt)
+    save_button.pack()
+
     clear_button = tkinter.Button(window, text='Erase', command=clear_window)
     clear_button.pack(side=TOP)
 
@@ -90,15 +94,14 @@ def clear_window():
 def print_answers():
     print("Selected Option: {}".format(value_inside.get()))
     if value_inside.get() == 'Generate labyrinth':
-        Generate()
+        generate_visuals()
     elif value_inside.get() == 'Upload labyrinth':
-        pass
+        recognize_visuals()
     else:
         pass
-    return None
 
 
-def Generate():
+def generate_visuals():
     global gen_option
 
     val_inside = tkinter.StringVar(window)
@@ -131,6 +134,43 @@ def Generate():
 
     button0 = tkinter.Button(window, text="Enter", command=get_size)
     button0.pack(side=TOP)
+
+
+def recognize_visuals():
+    get_path()
+    with open(save_filepath, 'r') as f:
+        pass
+    print('reading complete')
+    return
+
+
+def get_path():
+    file_title = Label(window, text='Enter filepath')
+    file_title.pack()
+
+    filepath = Entry(window, )
+    filepath.pack(side=TOP)
+
+    def get_filepath(): #needs fixing
+        global save_filepath
+        if not(filepath.get() == ''):
+            save_filepath = filepath.get()
+
+    button3 = tkinter.Button(window, text="Enter", command=get_filepath)
+    button3.pack(side=TOP)
+
+
+def save_to_txt():
+    get_path()
+    with open(save_filepath, 'w+') as f:
+        for i in range(m.height_):
+            for j in range(m.width_):
+                if m.cell_check_wall(i, j, True):
+                    f.write(u"\u2588\u2588\u2588")
+                else:
+                    f.write("   ")
+            f.write('\n')
+    print('saving complete')
 
 
 submit_button = tkinter.Button(window, text='Submit', command=print_answers)
