@@ -1,6 +1,5 @@
 import random
 import copy
-from labyrinthpy.Entities.labyrinth import Labyrinth
 from labyrinthpy.Entities.labyrinth import Cell
 
 
@@ -17,7 +16,7 @@ def solve(labyrinth):
         cell_r = random.choice(free_ngh)
         solution_path.append(((solution_path[-1][0] + cell_r[0]) // 2, (solution_path[-1][1] + cell_r[1]) // 2))
         solution_path.append(cell_r)
-    return solution_path
+    return cleanup_dead_ends(labyrinth, solution_path)
 
 
 def get_free_neighbours(labyrinth, cell):
@@ -60,15 +59,10 @@ def cleanup_dead_ends(labyrinth, solution_path):
                 found_flg = True
                 break
 
-            if found_flg:
-                solution_path = solution_path[:i_f] + solution_path[i_l:]
+        if found_flg:
+            solution_path = solution_path[:i_f] + solution_path[i_l:]
 
-        if len(solution_path) > 1:
-            if solution_path[0] == labyrinth.start_coord_:
-                solution_path = solution_path[1:]
-            if solution_path[-1] == labyrinth.finish_coord_:
-                solution_path = solution_path[:-1]
-        return solution_path
+    return solution_path
 
 
 def near_target(labyrinth, cell, target):
@@ -83,3 +77,5 @@ def show_solution(labyrinth):
     labyrinth.solutions_ = solve(labyrinth)
     for c in labyrinth.solutions_:
         labyrinth.set_solved_cell(c[0], c[1], Cell.SOLVED)
+    labyrinth.set_solved_cell(labyrinth.start_coord_[0], labyrinth.start_coord_[1], Cell.SOLVED)
+    labyrinth.set_solved_cell(labyrinth.finish_coord_[0], labyrinth.finish_coord_[1], Cell.SOLVED)

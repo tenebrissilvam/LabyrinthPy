@@ -3,7 +3,7 @@ import tkinter
 import labyrinthpy.Labyrinth_generation.DFS_generation
 import labyrinthpy.Labyrinth_generation.MST_Prims_generation
 import labyrinthpy.Labyrinth_generation.MST_Kruskals_generation
-import labyrinthpy.Labyrinth_solution.DFS_solution
+import labyrinthpy.Labyrinth_solution.solution
 import labyrinthpy.Entities.labyrinth
 
 from tkinter import *
@@ -42,7 +42,7 @@ def gen_lab():
 
 def print_solution():
     clear_window()
-    labyrinthpy.Labyrinth_solution.DFS_solution.show_solution(m)
+    labyrinthpy.Labyrinth_solution.solution.show_solution(m)
     text = Text(window, width=(w + 1) * 4 - 2, height=(h + 1) * 2 - 1)
     for i in range(m.height_):
         for j in range(m.width_):
@@ -58,6 +58,7 @@ def print_solution():
 
     clear_button = tkinter.Button(window, text='Erase', command=clear_window)
     clear_button.pack(side=TOP)
+
 
 def show_plot():
     text = Text(window, width=(w + 1) * 4 - 2, height=(h + 1) * 2 - 1)
