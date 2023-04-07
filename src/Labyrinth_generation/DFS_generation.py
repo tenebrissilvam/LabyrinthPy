@@ -1,6 +1,6 @@
-from labyrinthpy.Entities.labyrinth import Labyrinth
-from labyrinthpy.Entities.labyrinth import Cell
-from labyrinthpy.Labyrinth_generation.general_generation_methods import update_cells, add_entrance_finish
+from src.Entities.labyrinth import Labyrinth
+from src.Entities.labyrinth import Cell
+from src.Labyrinth_generation.general_generation_methods import update_cells, add_entrance_finish
 import random
 
 

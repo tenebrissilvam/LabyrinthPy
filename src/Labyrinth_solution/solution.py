@@ -1,6 +1,6 @@
 import random
 import copy
-from labyrinthpy.Entities.labyrinth import Cell
+from src.Entities.labyrinth import Cell
 
 
 def solve(labyrinth):

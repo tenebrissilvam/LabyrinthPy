@@ -1,17 +1,17 @@
 import tkinter
 
-import labyrinthpy.Labyrinth_generation.DFS_generation
-import labyrinthpy.Labyrinth_generation.MST_Prims_generation
-import labyrinthpy.Labyrinth_generation.MST_Kruskals_generation
-import labyrinthpy.Labyrinth_solution.solution
-import labyrinthpy.Entities.labyrinth
+import src.Labyrinth_generation.DFS_generation
+import src.Labyrinth_generation.MST_Prims_generation
+import src.Labyrinth_generation.MST_Kruskals_generation
+import src.Labyrinth_solution.solution
+import src.Entities.labyrinth
 
 from tkinter import *
 
 w = 0
 h = 0
 gen_option = ''
-m = labyrinthpy.Entities.labyrinth.Labyrinth()
+m = src.Entities.labyrinth.Labyrinth()
 save_filepath = 'LabyrinthPyLab.txt'
 
 window = Tk()
@@ -34,16 +34,16 @@ question_menu.pack()
 def gen_lab():
     global m
     if gen_option == 'DFS':
-        m = labyrinthpy.Labyrinth_generation.DFS_generation.generate_dfs(w, h)
+        m = src.Labyrinth_generation.DFS_generation.generate_dfs(w, h)
     elif gen_option == 'MinimalSpanningTree Prims':
-        m = labyrinthpy.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
+        m = src.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
     elif gen_option == 'MinimalSpanningTree Kruskals':
-        m = labyrinthpy.Labyrinth_generation.MST_Kruskals_generation.generate_mst_prims(w, h)
+        m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_prims(w, h)
 
 
 def print_solution():
     clear_window()
-    labyrinthpy.Labyrinth_solution.solution.show_solution(m)
+    src.Labyrinth_solution.solution.show_solution(m)
     text = Text(window, width=(w + 1) * 4 - 2, height=(h + 1) * 2 - 1)
     for i in range(m.height_):
         for j in range(m.width_):
@@ -140,6 +140,8 @@ def recognize_visuals():
     get_path()
     with open(save_filepath, 'r') as f:
         pass
+        # show read lab
+        # show solution
     print('reading complete')
     return
 
@@ -151,17 +153,18 @@ def get_path():
     filepath = Entry(window, )
     filepath.pack(side=TOP)
 
-    def get_filepath(): #needs fixing
+    def get_filepath():  # needs fixing
         global save_filepath
-        if not(filepath.get() == ''):
+        print(filepath.get())
+        if not (filepath.get() == ''):
             save_filepath = filepath.get()
+        save_fin()
 
     button3 = tkinter.Button(window, text="Enter", command=get_filepath)
     button3.pack(side=TOP)
 
 
-def save_to_txt():
-    get_path()
+def save_fin():
     with open(save_filepath, 'w+') as f:
         for i in range(m.height_):
             for j in range(m.width_):
@@ -171,6 +174,11 @@ def save_to_txt():
                     f.write("   ")
             f.write('\n')
     print('saving complete')
+
+
+def save_to_txt():
+    get_path()
+    print(save_filepath)
 
 
 submit_button = tkinter.Button(window, text='Submit', command=print_answers)

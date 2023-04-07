@@ -1,4 +1,4 @@
-from labyrinthpy.Entities.labyrinth import Cell
+from src.Entities.labyrinth import Cell
 
 def update_cells(labyrinth, y, x, cell_type, keep: list = None):
     labyrinth.set_cell(y, x, cell_type)
