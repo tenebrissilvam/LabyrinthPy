@@ -136,14 +136,50 @@ def generate_visuals():
     button0.pack(side=TOP)
 
 
-def recognize_visuals():
-    get_path()
+def recognize():
     with open(save_filepath, 'r') as f:
-        pass
-        # show read lab
-        # show solution
-    print('reading complete')
-    return
+        lines = f.readlines()
+        global m
+        global h
+        global w
+        w = ((len(lines[0]) - 1) // 2) // 3
+        h = (len(lines) - 1) // 2
+        m = src.Entities.labyrinth.Labyrinth((len(lines) - 1) // 2, ((len(lines[0]) - 1) // 2) // 3,
+                                             src.Entities.labyrinth.Cell.WALL)
+        y = 0
+        print(len(lines), (len(lines) - 1) // 2, len(lines[0]), ((len(lines[0]) - 1) // 2) // 3)
+        for line in lines:
+            for x in range(0, (len(lines) - 1) // 2, 3):
+                if line[x] == u"\u2588":
+                    m.set_cell(y, x, src.Entities.labyrinth.Cell.WALL)
+                elif line[x] == " ":
+                    m.set_cell(y, x, src.Entities.labyrinth.Cell.PATH)
+            y += 1
+        print('reading complete')
+    show_plot()
+
+
+def recognize_visuals():
+    get_path_read()
+    print(save_filepath)
+
+
+def get_path_read():
+    file_title = Label(window, text='Enter filepath')
+    file_title.pack()
+
+    filepath = Entry(window, )
+    filepath.pack(side=TOP)
+
+    def get_filepath_read():  # needs fixing
+        global save_filepath
+        print(filepath.get())
+        if not (filepath.get() == ''):
+            save_filepath = filepath.get()
+        recognize()
+
+    button3 = tkinter.Button(window, text="Enter", command=get_filepath_read)
+    button3.pack(side=TOP)
 
 
 def get_path():
