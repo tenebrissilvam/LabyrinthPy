@@ -1,48 +1,228 @@
-from src.Entities.labyrinth import Labyrinth
-from src.Entities.labyrinth import Cell
-from src.Labyrinth_generation.general_generation_methods import update_cells
+import tkinter
 
-def write_svg(labyrinth, filename):
-    aspect_ratio = labyrinth.width_ / labyrinth.height_
-    padding = 10
-    height = 500
-    width = int(height * aspect_ratio)
-    # Scaling factors mapping maze coordinates to image coordinates
-    scy, scx = height / labyrinth.height_, width / labyrinth.width_
-    def write_wall(ww_f, ww_x1, ww_y1, ww_x2, ww_y2):
-        """Write a single wall to the SVG image file handle f."""
+import src.Labyrinth_generation.DFS_generation
+import src.Labyrinth_generation.MST_Prims_generation
+import src.Labyrinth_generation.MST_Kruskals_generation
+import src.Labyrinth_solution.solution
+import src.Entities.labyrinth
 
-        print('<line x1="{}" y1="{}" x2="{}" y2="{}"/>'
-              .format(ww_x1, ww_y1, ww_x2, ww_y2), file=ww_f)
+from tkinter import *
 
-    # Write the SVG image file for maze
-    with open(filename, 'w') as f:
-        # SVG preamble and styles.
-        print('<?xml version="1.0" encoding="utf-8"?>', file=f)
-        print('<svg xmlns="http://www.w3.org/2000/svg"', file=f)
-        print('    xmlns:xlink="http://www.w3.org/1999/xlink"', file=f)
-        print('    width="{:d}" height="{:d}" viewBox="{} {} {} {}">'
-              .format(width + 2 * padding, height + 2 * padding,
-                      -padding, -padding, width + 2 * padding, height + 2 * padding),
-              file=f)
-        print('<defs>\n<style type="text/css"><![CDATA[', file=f)
-        print('line {', file=f)
-        print('    stroke: #000000;\n    stroke-linecap: square;', file=f)
-        print('    stroke-width: 5;\n}', file=f)
-        print(']]></style>\n</defs>', file=f)
-        # Draw the "South" and "East" walls of each cell, if present (these
-        # are the "North" and "West" walls of a neighbouring cell in
-        # general, of course).
-        for x in range(labyrinth.width_):
-            for y in range(labyrinth.height_):
-                if self.cell_at(x, y).walls['S']:
-                    x1, y1, x2, y2 = x * scx, (y + 1) * scy, (x + 1) * scx, (y + 1) * scy
-                    write_wall(f, x1, y1, x2, y2)
-                if self.cell_at(x, y).walls['E']:
-                    x1, y1, x2, y2 = (x + 1) * scx, y * scy, (x + 1) * scx, (y + 1) * scy
-                    write_wall(f, x1, y1, x2, y2)
-        # Draw the North and West maze border, which won't have been drawn
-        # by the procedure above.
-        print('<line x1="0" y1="0" x2="{}" y2="0"/>'.format(width), file=f)
-        print('<line x1="0" y1="0" x2="0" y2="{}"/>'.format(height), file=f)
-        print('</svg>', file=f)
+w = 0
+h = 0
+gen_option = ''
+m = src.Entities.labyrinth.Labyrinth()
+save_filepath = 'LabyrinthPyLab.txt'
+
+window = Tk()
+window.title("LabyrinthPy")
+window.geometry('1000x800')
+
+lab_title = Label(window, text='Enter option to continue')
+lab_title.pack()
+
+options_list = ['Generate labyrinth', 'Upload labyrinth']
+options_for_generation = ['DFS', 'MinimalSpanningTree Prims', 'MinimalSpanningTree Kruskals']
+
+value_inside = tkinter.StringVar(window)
+value_inside.set("Select an Option")
+
+question_menu = tkinter.OptionMenu(window, value_inside, *options_list)
+question_menu.pack()
+
+
+def gen_lab():
+    global m
+    if gen_option == 'DFS':
+        m = src.Labyrinth_generation.DFS_generation.generate_dfs(w, h)
+    elif gen_option == 'MinimalSpanningTree Prims':
+        m = src.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
+    elif gen_option == 'MinimalSpanningTree Kruskals':
+        m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_prims(w, h)
+
+
+def print_solution():
+    clear_window()
+    src.Labyrinth_solution.solution.show_solution(m)
+    text = Text(window, width=(w + 1) * 4 - 2, height=(h + 1) * 2 - 1)
+    for i in range(m.height_):
+        for j in range(m.width_):
+            if m.cell_check_solved_wall(i, j, True):
+                text.insert(END, u"\u2588\u2588")
+            elif m.cell_check_solved_sol(i, j, True):
+                text.insert(END, u"\u2592\u2592")
+            else:
+                text.insert(END, "  ")
+        if not (i == m.height_ - 1):
+            text.insert(END, '\n')
+    text.pack()
+
+    clear_button = tkinter.Button(window, text='Erase', command=clear_window)
+    clear_button.pack(side=TOP)
+
+
+def show_plot():
+    text = Text(window, width=(w + 1) * 4 - 2, height=(h + 1) * 2 - 1)
+    for i in range(m.height_):
+        for j in range(m.width_):
+            if m.cell_check_wall(i, j, True):
+                text.insert(END, u"\u2588\u2588")
+            else:
+                text.insert(END, "  ")
+        if not (i == m.height_ - 1):
+            text.insert(END, '\n')
+    text.pack()
+
+    save_button = tkinter.Button(window, text='Save as .txt', command=save_to_txt)
+    save_button.pack()
+
+    clear_button = tkinter.Button(window, text='Erase', command=clear_window)
+    clear_button.pack(side=TOP)
+
+    solve_button = tkinter.Button(window, text='Show Solution', command=print_solution)
+    solve_button.pack(side=TOP)
+
+
+def clear_window():
+    flag = False
+    for widget in window.winfo_children():
+        if widget.widgetName == "text" or flag:
+            flag = True
+            widget.destroy()
+
+
+def print_answers():
+    print("Selected Option: {}".format(value_inside.get()))
+    if value_inside.get() == 'Generate labyrinth':
+        generate_visuals()
+    elif value_inside.get() == 'Upload labyrinth':
+        recognize_visuals()
+    else:
+        pass
+
+
+def generate_visuals():
+    global gen_option
+
+    val_inside = tkinter.StringVar(window)
+    val_inside.set("Select an Option")
+
+    params_label = Label(window, text='Choose generation algorithm')
+    params_label.pack()
+
+    gen_question_menu = tkinter.OptionMenu(window, val_inside, *options_for_generation)
+    gen_question_menu.pack()
+
+    params_label = Label(window, text='Enter width and height (Recommended range of values [1;25])')
+    params_label.pack()
+
+    width = Entry(window, )
+    width.pack(side=TOP)
+    height = Entry(window, )
+    height.pack(side=TOP)
+
+    def get_size():
+        global w
+        w = int(width.get())
+        global h
+        h = int(height.get())
+        print(w, h)
+        global gen_option
+        gen_option = val_inside.get()
+        gen_lab()
+        show_plot()
+
+    button0 = tkinter.Button(window, text="Enter", command=get_size)
+    button0.pack(side=TOP)
+
+
+def recognize():
+    with open(save_filepath, 'r') as f:
+        lines = f.readlines()
+        global m
+        global h
+        global w
+        w = (len(lines[0])) // 6
+        h = len(lines) // 2
+        m = src.Entities.labyrinth.Labyrinth(w, h, src.Entities.labyrinth.Cell.WALL)
+        y = 0
+        print(w, h)
+        for line in lines:
+            for x in range(0, len(line), 3):
+                tau = line[x]
+                if y == 0 and line[x] == " ":
+                    m.start_coord_ = (0, x//3)
+                if y == h - 1 and line[x] == " ":
+                    m.finish_coord_ = (2*y + 2, x//3)
+                if line[x] == u"\u2588":
+                    m.set_cell(y, x//3, src.Entities.labyrinth.Cell.WALL)
+                elif line[x] == " ":
+                    m.set_cell(y, x//3, src.Entities.labyrinth.Cell.PATH)
+            y += 1
+        print('reading complete')
+
+    show_plot()
+
+
+def recognize_visuals():
+    get_path_read()
+    print(save_filepath)
+
+
+def get_path_read():
+    file_title = Label(window, text='Enter filepath')
+    file_title.pack()
+
+    filepath = Entry(window, )
+    filepath.pack(side=TOP)
+
+    def get_filepath_read():  # needs fixing
+        global save_filepath
+        print(filepath.get())
+        if not (filepath.get() == ''):
+            save_filepath = filepath.get()
+        recognize()
+
+    button3 = tkinter.Button(window, text="Enter", command=get_filepath_read)
+    button3.pack(side=TOP)
+
+
+def get_path():
+    file_title = Label(window, text='Enter filepath')
+    file_title.pack()
+
+    filepath = Entry(window, )
+    filepath.pack(side=TOP)
+
+    def get_filepath():  # needs fixing
+        global save_filepath
+        print(filepath.get())
+        if not (filepath.get() == ''):
+            save_filepath = filepath.get()
+        save_fin()
+
+    button3 = tkinter.Button(window, text="Enter", command=get_filepath)
+    button3.pack(side=TOP)
+
+
+def save_fin():
+    with open(save_filepath, 'w+') as f:
+        for i in range(m.height_):
+            for j in range(m.width_):
+                if m.cell_check_wall(i, j, True):
+                    f.write(u"\u2588\u2588\u2588")
+                else:
+                    f.write("   ")
+            f.write('\n')
+    print('saving complete')
+
+
+def save_to_txt():
+    get_path()
+    print(save_filepath)
+
+
+submit_button = tkinter.Button(window, text='Submit', command=print_answers)
+submit_button.pack()
+
+window.mainloop()
