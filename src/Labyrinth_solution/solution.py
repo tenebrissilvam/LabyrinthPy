@@ -1,12 +1,12 @@
 import random
 import copy
-from src.Entities.labyrinth import Cell
+from src.Entities.labyrinth import Cell, Labyrinth
 
 
-def solve(labyrinth):
+def solve(labyrinth: Labyrinth) -> list:
     solution_path = [(1, labyrinth.start_coord_[1])]
     cnt = 0
-    while not near_target(labyrinth, solution_path[-1], labyrinth.finish_coord_):
+    while not near_target(solution_path[-1], labyrinth.finish_coord_):
         free_ngh = get_free_neighbours(labyrinth, solution_path[-1])
         random.shuffle(free_ngh)
         cnt += 1
@@ -16,10 +16,10 @@ def solve(labyrinth):
         cell_r = random.choice(free_ngh)
         solution_path.append(((solution_path[-1][0] + cell_r[0]) // 2, (solution_path[-1][1] + cell_r[1]) // 2))
         solution_path.append(cell_r)
-    return cleanup_dead_ends(labyrinth, solution_path)
+    return cleanup_dead_ends(solution_path)
 
 
-def get_free_neighbours(labyrinth, cell):
+def get_free_neighbours(labyrinth: Labyrinth, cell: Cell) -> list:
     y, x = cell
     free_ngh = []
 
@@ -40,7 +40,7 @@ def get_free_neighbours(labyrinth, cell):
     return free_ngh
 
 
-def cleanup_dead_ends(labyrinth, solution_path):
+def cleanup_dead_ends(solution_path: list) -> list:
     found_flg = True
     attempts = 0
     attempts_threshold = len(solution_path)
@@ -65,7 +65,7 @@ def cleanup_dead_ends(labyrinth, solution_path):
     return solution_path
 
 
-def near_target(labyrinth, cell, target):
+def near_target(cell, target: (int, int)):
     if not cell or not target:
         return False
     return ((cell[0] == target[0] and abs(cell[1] - target[1]) < 2) or

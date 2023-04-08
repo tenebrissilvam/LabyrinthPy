@@ -4,14 +4,12 @@ from src.Labyrinth_generation.general_generation_methods import update_cells, ad
 import random
 
 
-def generate_dfs(width, height) -> Labyrinth:
+def generate_dfs(width: int, height: int) -> Labyrinth:
     path = []  # list of chosen adjacent cells starting from randomly chosen first cell
 
     labyrinth = Labyrinth(width, height, Cell.WALL)  # init labyrinth full of walls
     y, x = labyrinth.get_random_cell()  # randomly choose starting cell
     update_cells(labyrinth, y, x, Cell.PATH, path)  # set starting cell as PATH cell
-    # labyrinth.set_cell(y, x, Cell.PATH)
-    # path.append((y, x))
 
     while path:
         (y, x) = path[-1]  # continue from last added cell

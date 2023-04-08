@@ -4,7 +4,7 @@ from src.Labyrinth_generation.general_generation_methods import update_cells, ad
 import random
 
 
-def generate_mst_prims(width, height) -> Labyrinth:
+def generate_mst_prims(width: int, height: int) -> Labyrinth:
     labyrinth = Labyrinth(width, height, Cell.WALL)
     y, x = labyrinth.get_random_cell()  # randomly choose starting cell
     update_cells(labyrinth, y, x, Cell.PATH)

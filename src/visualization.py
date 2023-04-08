@@ -22,7 +22,8 @@ lab_title = Label(window, text='Enter option to continue')
 lab_title.pack()
 
 options_list = ['Generate labyrinth', 'Upload labyrinth']
-options_for_generation = ['DFS', 'MinimalSpanningTree Prims', 'MinimalSpanningTree Kruskals']
+options_for_generation = ['DFS', 'MinimalSpanningTree Prims', 'MinimalSpanningTree Kruskals',
+                          'Binary tree', 'Wilsons', 'impossible waffle']
 
 value_inside = tkinter.StringVar(window)
 value_inside.set("Select an Option")
@@ -33,12 +34,19 @@ question_menu.pack()
 
 def gen_lab():
     global m
-    if gen_option == 'DFS':
-        m = src.Labyrinth_generation.DFS_generation.generate_dfs(w, h)
-    elif gen_option == 'MinimalSpanningTree Prims':
-        m = src.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
-    elif gen_option == 'MinimalSpanningTree Kruskals':
-        m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_prims(w, h)
+    match gen_option:
+        case 'DFS':
+            m = src.Labyrinth_generation.DFS_generation.generate_dfs(w, h)
+        case 'MinimalSpanningTree Prims':
+            m = src.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
+        case 'MinimalSpanningTree Kruskals':
+            m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_kruskals(w, h)
+        case 'Wilsons':
+            m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_kruskals(w, h)
+        case 'impossible waffle':
+            m = src.Labyrinth_generation.MST_Kruskals_generation.impossible_waffle(w, h)
+        case _:
+            print('option not chosen')
 
 
 def print_solution():
@@ -93,12 +101,13 @@ def clear_window():
 
 def print_answers():
     print("Selected Option: {}".format(value_inside.get()))
-    if value_inside.get() == 'Generate labyrinth':
-        generate_visuals()
-    elif value_inside.get() == 'Upload labyrinth':
-        recognize_visuals()
-    else:
-        pass
+    match value_inside.get():
+        case 'Generate labyrinth':
+            generate_visuals()
+        case 'Upload labyrinth':
+            recognize_visuals()
+        case _:
+            pass
 
 
 def generate_visuals():
