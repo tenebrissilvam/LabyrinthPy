@@ -142,18 +142,18 @@ def recognize():
         global m
         global h
         global w
-        w = ((len(lines[0]) - 1) // 2) // 3
-        h = (len(lines) - 1) // 2
-        m = src.Entities.labyrinth.Labyrinth((len(lines) - 1) // 2, ((len(lines[0]) - 1) // 2) // 3,
-                                             src.Entities.labyrinth.Cell.WALL)
+        w = (len(lines[0])) // 6
+        h = len(lines) // 2
+        m = src.Entities.labyrinth.Labyrinth(w, h, src.Entities.labyrinth.Cell.WALL)
         y = 0
-        print(len(lines), (len(lines) - 1) // 2, len(lines[0]), ((len(lines[0]) - 1) // 2) // 3)
+        print(w, h)
         for line in lines:
-            for x in range(0, (len(lines) - 1) // 2, 3):
+            for x in range(0, len(line), 3):
+                tau = line[x]
                 if line[x] == u"\u2588":
-                    m.set_cell(y, x, src.Entities.labyrinth.Cell.WALL)
+                    m.set_cell(y, x//3, src.Entities.labyrinth.Cell.WALL)
                 elif line[x] == " ":
-                    m.set_cell(y, x, src.Entities.labyrinth.Cell.PATH)
+                    m.set_cell(y, x//3, src.Entities.labyrinth.Cell.PATH)
             y += 1
         print('reading complete')
     show_plot()
