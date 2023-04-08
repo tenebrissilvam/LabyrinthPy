@@ -150,12 +150,17 @@ def recognize():
         for line in lines:
             for x in range(0, len(line), 3):
                 tau = line[x]
+                if y == 0 and line[x] == " ":
+                    m.start_coord_ = (0, x//3)
+                if y == h - 1 and line[x] == " ":
+                    m.finish_coord_ = (2*y + 2, x//3)
                 if line[x] == u"\u2588":
                     m.set_cell(y, x//3, src.Entities.labyrinth.Cell.WALL)
                 elif line[x] == " ":
                     m.set_cell(y, x//3, src.Entities.labyrinth.Cell.PATH)
             y += 1
         print('reading complete')
+
     show_plot()
 
 
