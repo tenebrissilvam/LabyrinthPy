@@ -1,7 +1,5 @@
-import copy
 from enum import Enum
 import random
-import os
 
 
 class Cell(Enum):

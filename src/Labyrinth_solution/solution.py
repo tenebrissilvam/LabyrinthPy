@@ -1,5 +1,6 @@
-import random
 import copy
+import random
+
 from src.Entities.labyrinth import Cell, Labyrinth
 
 
@@ -30,30 +31,26 @@ def get_free_neighbours(labyrinth: Labyrinth, cell: Cell) -> list:
 
     if (y > 1 and not (labyrinth.get_cell(y - 1, x) == Cell.WALL)
             and not (labyrinth.get_cell(y - 2, x) == Cell.WALL)):
-
         free_ngh.append((y - 2, x))
 
     if (y < labyrinth.height_ - 2
             and not (labyrinth.get_cell(y + 1, x) == Cell.WALL)
             and not (labyrinth.get_cell(y + 2, x) == Cell.WALL)):
-
         free_ngh.append((y + 2, x))
 
     if (x > 1 and not (labyrinth.get_cell(y, x - 1) == Cell.WALL)
             and not (labyrinth.get_cell(y, x - 2) == Cell.WALL)):
-
         free_ngh.append((y, x - 2))
 
     if (x < labyrinth.width_ - 2
             and not (labyrinth.get_cell(y, x + 1) == Cell.WALL)
             and not (labyrinth.get_cell(y, x + 2) == Cell.WALL)):
-
         free_ngh.append((y, x + 2))
 
     return free_ngh
 
 
-def cleanup_dead_ends(solution_path: list) -> list:
+def cleanup_dead_ends(solution_path: list) -> list:  # removes dead ends from solution path
     found_flg = True
     attempts = 0
     attempts_threshold = len(solution_path)

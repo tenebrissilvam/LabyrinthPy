@@ -1,13 +1,16 @@
-import tkinter
-
-import src.Labyrinth_generation.DFS_generation
-import src.Labyrinth_generation.MST_Prims_generation
-import src.Labyrinth_generation.MST_Kruskals_generation
-import src.Labyrinth_generation.binary_tree_generation
-import src.Labyrinth_solution.solution
 import src.Entities.labyrinth
 
-from tkinter import *
+import src.Labyrinth_generation.binary_tree_generation
+import src.Labyrinth_generation.DFS_generation
+import src.Labyrinth_generation.MST_Kruskals_generation
+import src.Labyrinth_generation.MST_Prims_generation
+import src.Labyrinth_generation.Wilsons_generation
+
+import src.Labyrinth_solution.solution
+
+import tkinter
+
+from tkinter import Label, Tk, Text, END, TOP, Entry, Scrollbar, RIGHT, Y
 
 w = 0
 h = 0
@@ -19,12 +22,16 @@ window = Tk()
 window.title("LabyrinthPy")
 window.geometry('1000x800')
 
+scrollbar = Scrollbar(window)
+scrollbar.pack(side=RIGHT, fill=Y)
+#scrollbar.config(yscrollcommand=window.set)
+
 lab_title = Label(window, text='Enter option to continue')
 lab_title.pack()
 
 options_list = ['Generate labyrinth', 'Upload labyrinth']
 options_for_generation = ['DFS', 'MinimalSpanningTree Prims', 'MinimalSpanningTree Kruskals',
-                          'Binary tree', 'Wilsons', 'impossible waffle']
+                          'Binary tree', 'Wilsons']
 
 value_inside = tkinter.StringVar(window)
 value_inside.set("Select an Option")
@@ -45,9 +52,7 @@ def gen_lab():
         case 'Binary tree':
             m = src.Labyrinth_generation.binary_tree_generation.generate_binary_tree(w, h)
         case 'Wilsons':
-            m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_kruskals(w, h)
-        case 'impossible waffle':
-            m = src.Labyrinth_generation.MST_Kruskals_generation.impossible_waffle(w, h)
+            m = src.Labyrinth_generation.Wilsons_generation.generate_wilsons(w, h)
         case _:
             print('option not chosen')
 
