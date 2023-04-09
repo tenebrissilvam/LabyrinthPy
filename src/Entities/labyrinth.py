@@ -7,9 +7,7 @@ import os
 class Cell(Enum):
     PATH = 0
     WALL = 1
-    START = 2
-    END = 3
-    SOLVED = 4
+    SOLVED = 2
 
 
 class Labyrinth:
@@ -22,31 +20,31 @@ class Labyrinth:
         self.start_coord_ = ()
         self.finish_coord_ = ()
 
-    def set_solved_cell(self, y, x, cell: Cell):
+    def set_solved_cell(self, y: int, x: int, cell: Cell):
         self.solved_[y][x] = cell
 
-    def set_cell(self, y, x, cell: Cell):
+    def set_cell(self, y: int, x: int, cell: Cell):
         self.grid_[y][x] = cell
 
-    def get_cell(self, y, x) -> Cell:
+    def get_cell(self, y: int, x: int) -> Cell:
         return self.grid_[y][x]
 
-    def get_solved_cell(self, y, x) -> Cell:
+    def get_solved_cell(self, y: int, x: int) -> Cell:
         return self.solved_[y][x]
 
-    def cell_check_wall(self, y, x, wall_flg):
+    def cell_check_wall(self, y: int, x: int, wall_flg: bool) -> bool:
         if wall_flg:
             return self.get_cell(y, x) == Cell.WALL
         else:
             return self.get_cell(y, x) != Cell.WALL
 
-    def cell_check_solved_sol(self, y, x, solved_flg):
+    def cell_check_solved_sol(self, y: int, x: int, solved_flg: bool) -> bool:
         if solved_flg:
             return self.get_solved_cell(y, x) == Cell.SOLVED
         else:
             return self.get_cell(y, x) != Cell.SOLVED
 
-    def cell_check_solved_wall(self, y, x, solved_flg):
+    def cell_check_solved_wall(self, y: int, x: int, solved_flg: bool) -> bool:
         if solved_flg:
             return self.get_solved_cell(y, x) == Cell.WALL
         else:
@@ -55,7 +53,7 @@ class Labyrinth:
     def get_random_cell(self) -> tuple:
         return random.randrange(1, self.height_, 2), random.randrange(1, self.width_, 2)
 
-    def neighbour_check(self, row, column, wall_flg: bool = False) -> list[tuple[int, int]]:
+    def neighbour_check(self, row: int, column: int, wall_flg: bool = False) -> list[tuple[int, int]]:
         neighbours = []
 
         if row > 1 and self.cell_check_wall(row - 2, column, wall_flg):  # if not top border
@@ -78,9 +76,3 @@ class Labyrinth:
                 else:
                     print("   ", sep='', end='')
             print('\n', sep='', end='')
-
-    def save(self, filepath):
-        # with open(os.path.join(filepath, 'GeneratedMaze'), 'w') as file1:
-        # to_file = raw_input(self.visualize())
-        # file1.write(to_file)
-        return

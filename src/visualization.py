@@ -3,6 +3,7 @@ import tkinter
 import src.Labyrinth_generation.DFS_generation
 import src.Labyrinth_generation.MST_Prims_generation
 import src.Labyrinth_generation.MST_Kruskals_generation
+import src.Labyrinth_generation.binary_tree_generation
 import src.Labyrinth_solution.solution
 import src.Entities.labyrinth
 
@@ -41,6 +42,8 @@ def gen_lab():
             m = src.Labyrinth_generation.MST_Prims_generation.generate_mst_prims(w, h)
         case 'MinimalSpanningTree Kruskals':
             m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_kruskals(w, h)
+        case 'Binary tree':
+            m = src.Labyrinth_generation.binary_tree_generation.generate_binary_tree(w, h)
         case 'Wilsons':
             m = src.Labyrinth_generation.MST_Kruskals_generation.generate_mst_kruskals(w, h)
         case 'impossible waffle':

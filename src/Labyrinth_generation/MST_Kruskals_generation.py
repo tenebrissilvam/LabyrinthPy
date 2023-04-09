@@ -54,4 +54,6 @@ def impossible_waffle(width: int, height: int) -> Labyrinth:
         for x in range(1, labyrinth.width_ - 1, 2):
             vertices.append([(y, x)])
             labyrinth.set_cell(y, x, Cell.PATH)
+
+    add_entrance_finish(labyrinth)
     return labyrinth
