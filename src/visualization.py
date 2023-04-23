@@ -1,3 +1,4 @@
+from globals import h, w, m, save_filepath, gen_option, window, value_inside, options_list, options_for_generation
 import src.Entities.labyrinth
 
 import src.Labyrinth_generation.binary_tree_generation
@@ -12,32 +13,26 @@ import tkinter
 
 from tkinter import Label, Tk, Text, END, TOP, Entry, Scrollbar, RIGHT, Y
 
-w = 0
-h = 0
-gen_option = ''
-m = src.Entities.labyrinth.Labyrinth()
-save_filepath = 'LabyrinthPyLab.txt'
 
-window = Tk()
-window.title("LabyrinthPy")
-window.geometry('1000x800')
+def run_in_window():
+    window.title("LabyrinthPy")
+    window.geometry('1000x800')
 
-scrollbar = Scrollbar(window)
-scrollbar.pack(side=RIGHT, fill=Y)
-#scrollbar.config(yscrollcommand=window.set)
+    scrollbar = Scrollbar(window)
+    scrollbar.pack(side=RIGHT, fill=Y)
 
-lab_title = Label(window, text='Enter option to continue')
-lab_title.pack()
+    lab_title = Label(window, text='Enter option to continue')
+    lab_title.pack()
 
-options_list = ['Generate labyrinth', 'Upload labyrinth']
-options_for_generation = ['DFS', 'MinimalSpanningTree Prims', 'MinimalSpanningTree Kruskals',
-                          'Binary tree', 'Wilsons']
+    value_inside.set("Select an Option")
 
-value_inside = tkinter.StringVar(window)
-value_inside.set("Select an Option")
+    question_menu = tkinter.OptionMenu(window, value_inside, *options_list)
+    question_menu.pack()
 
-question_menu = tkinter.OptionMenu(window, value_inside, *options_list)
-question_menu.pack()
+    submit_button = tkinter.Button(window, text='Submit', command=print_answers)
+    submit_button.pack()
+
+    window.mainloop()
 
 
 def gen_lab():
@@ -168,13 +163,13 @@ def recognize():
             for x in range(0, len(line), 3):
                 tau = line[x]
                 if y == 0 and line[x] == " ":
-                    m.start_coord_ = (0, x//3)
+                    m.start_coord_ = (0, x // 3)
                 if y == h - 1 and line[x] == " ":
-                    m.finish_coord_ = (2*y + 2, x//3)
+                    m.finish_coord_ = (2 * y + 2, x // 3)
                 if line[x] == u"\u2588":
-                    m.set_cell(y, x//3, src.Entities.labyrinth.Cell.WALL)
+                    m.set_cell(y, x // 3, src.Entities.labyrinth.Cell.WALL)
                 elif line[x] == " ":
-                    m.set_cell(y, x//3, src.Entities.labyrinth.Cell.PATH)
+                    m.set_cell(y, x // 3, src.Entities.labyrinth.Cell.PATH)
             y += 1
         print('reading complete')
 
@@ -239,7 +234,4 @@ def save_to_txt():
     print(save_filepath)
 
 
-submit_button = tkinter.Button(window, text='Submit', command=print_answers)
-submit_button.pack()
-
-window.mainloop()
+run_in_window()
